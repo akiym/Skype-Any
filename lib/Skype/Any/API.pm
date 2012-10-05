@@ -45,7 +45,7 @@ sub send_command {
     my $reply = $self->send($command->as_string);
     if ($reply) {
         if ($reply =~ /^#\Q$command->{id}\E/) {
-            $self->_notify_handler()->($self, $reply);
+            $self->_notify_handler()->($reply);
         }
     } else {
         if ($command->{blocking}) {
