@@ -11,7 +11,6 @@ sub new {
     return bless {
         command  => $command,
         id       => -1,
-        blocking => 1,
         reply    => '',
         %$args,
     }, $class;

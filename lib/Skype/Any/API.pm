@@ -48,10 +48,8 @@ sub send_command {
             $self->_notify_handler()->($reply);
         }
     } else {
-        if ($command->{blocking}) {
-            while (!$command->{reply}) {
-                $self->sleep;
-            }
+        while (!$command->{reply}) {
+            $self->sleep;
         }
     }
     $self->handler->call('Command', _ => $command);
