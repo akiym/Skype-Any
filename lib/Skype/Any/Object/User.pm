@@ -21,12 +21,7 @@ sub create_chat {
 
 sub chat {
     my $self = shift;
-    unless (exists $self->{chat_cache}) {
-        my $chat = $self->create_chat();
-        $self->{chat_cache} = $chat->{id};
-        return $chat;
-    }
-    return $self->object(chat => $self->{chat_cache});
+    return $self->create_chat();
 }
 
 1;
