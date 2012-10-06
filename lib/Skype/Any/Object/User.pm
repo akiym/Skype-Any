@@ -36,13 +36,18 @@ Skype::Any::Object::User - User object for Skype::Any
     use Skype::Any;
 
     my $skype = Skype::Any->new;
-    my $user = $skype->user($id);
+    my $user = $skype->user('echo123');
+    my $users = $skype->user('echo123, t.akiym');
 
 =head1 METHODS
 
 =head2 C<create_chat>
 
+Create new instance of L<Skype::Any::Object::Chat>.
+
 =head2 C<chat>
+
+Alias for C<create_chat>.
 
 =head2 C<property>
 

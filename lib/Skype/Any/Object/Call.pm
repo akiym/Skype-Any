@@ -95,6 +95,8 @@ Skype::Any::Object::Call - Call object for Skype::Any
 
 =back
 
+=head2 C<alter>
+
 =head1 SEE ALSO
 
 L<Skype::Any::Object>

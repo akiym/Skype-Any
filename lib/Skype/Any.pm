@@ -118,15 +118,17 @@ Create new instance of Skype::Any. Notice that necessary Skype client is running
 
 =item name => 'Skype::Any' : Str
 
+Name of your application. This name will be shown to the user, when your application uses Skype.
+
 =item protocol => 8 : Num
+
+Protocol number.
 
 =back
 
 =head2 C<object>
 
-  $skype->object($obj => $id);
-
-Create new instance of Skype::Any::Object::*.
+See below for more infomation.
 
 =head2 C<user>
 
@@ -138,13 +140,25 @@ Create new instance of L<Skype::Any::User>.
 
 Register _ (default) handler.
 
-Alias for:
-
-  $skype->handler->register('USER', +{_ => sub { ... }})
-
   $skype->user($name => sub { ... }, ...)
 
 Register $name handler.
+
+  $skype->user($id);
+  $skype->user(sub {
+  });
+  $skype->user($name => sub {
+  });
+
+this code similar to:
+
+  $skype->object(user => $id);
+  $skype->object(user => sub {
+  });
+  $skype->object(user => $name => sub {
+  });
+
+C<profile>, C<call>, ..., these methods are the same operation.
 
 =head2 C<profile>
 
@@ -155,6 +169,8 @@ L<Skype::Any::Profile>
 L<Skype::Any::Call>
 
 =head2 C<message>
+
+Deprecated. You can use C<Skype::Any::ChatMessage>.
 
 L<Skype::Any::Message>
 
@@ -194,7 +210,7 @@ L<Skype::Any::FileTransfer>
 
   $skype->message_received(sub { my ($msg) = @_; ... });
 
-L<Skype::Any::ChatMessage>
+Register 'chatmessage' handler for when a chat message is coming.
 
 =head2 C<message_received>
 
@@ -214,13 +230,20 @@ Running an event loop.
 
 =head2 C<api>
 
-L<Skype::Any::API>
+Instance of L<Skype::Any::API>. e.g. send "Happy new year!" to all recent chats.
+
+  my $reply = $skype->api->send_command('SEARCH RECENTCHATS')->reply;
+  $reply =~ s/^CHATS\s+//;
+  for my $chatname (split /,\s+/ $reply) {
+      my $chat = $skype->chat($chatname);
+      $chat->send_message('Happy new year!");
+  }
 
 =head2 C<handler>
 
-  $skype->handler->register($name, sub { ... });
+Instance of L<Skype::Any::Handler>. You can also register a handler:
 
-See also L<Skype::Any::Handler>.
+  $skype->handler->register($name, sub { ... });
 
 =head1 SEE ALSO
 

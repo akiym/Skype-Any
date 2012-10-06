@@ -15,3 +15,24 @@ sub as_numeric { $_[0]->{code} }
 sub as_string  { $_[0]->{description} }
 
 1;
+__END__
+
+=head1 NAME
+
+Skype::Any::Error - Error interface for Skype::Any
+
+=head1 METHODS
+
+=head2 C<as_numeric>
+
+Return error code.
+
+=head2 C<as_string>
+
+Return error description.
+
+=head1 SEE ALSO
+
+L<Public API Reference|https://developer.skype.com/public-api-reference#ERRORS>
+
+=cut

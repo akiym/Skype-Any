@@ -65,7 +65,7 @@ __END__
 
 =head1 NAME
 
-Skype::Any::Object - 
+Skype::Any::Object - General object class for Skype::Any::Object::*
 
 =head1 METHODS
 
@@ -73,7 +73,7 @@ Skype::Any::Object -
 
   $object->object($obj, @args);
 
-Create instance of Skype::Any::Object*.
+Create new instance of Skype::Any::Object::*.
 
   my $user = $object->object(user => 'echo123');
 
@@ -91,10 +91,10 @@ Set $property to $value.
 
 =head2 C<api>
 
-L<Skype::Any::API>
+Instance of L<Skype::Any::API>.
 
 =head2 C<handler>
 
-L<Skype::Any::Handler>
+Instance of L<Skype::Any::Handler>.
 
 =cut
