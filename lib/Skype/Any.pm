@@ -5,7 +5,7 @@ use 5.008001;
 use Skype::Any::Handler;
 use Skype::Any::Util qw/load_class/;
 
-our $VERSION = '0.02';
+our $VERSION = '0.03';
 
 sub new {
     my $class = shift;
