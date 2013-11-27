@@ -37,7 +37,6 @@ sub reply {
     if ($obj eq 'ERROR') {
         my ($code, $description) = split /\s+/, $params, 2;
         my $error = Skype::Any::Error->new($code, $description);
-        $self->handler->call('Error', _ => $error);
         Carp::carp("Caught error: $error");
         return undef;
     }
@@ -54,6 +53,7 @@ sub split_reply {
     $limit ||= 4;
 
     my $reply = $self->reply();
+    return undef unless $reply;
     return split /\s+/, $reply, $limit;
 }
 
