@@ -14,14 +14,16 @@ Skype::Any::Object::Group - Group object for Skype::Any
 
 =head1 SYNOPSIS
 
-    use Skype::Any;
+  use Skype::Any;
 
-    my $skype = Skype::Any->new;
-    my $group = $skype->group($id);
+  my $skype = Skype::Any->new;
+  my $group = $skype->group($id);
 
 =head1 METHODS
 
-=head2 C<property>
+=over 4
+
+=item C<< $group->property($property[, $value]) >>
 
 =over 4
 
@@ -39,8 +41,6 @@ Skype::Any::Object::Group - Group object for Skype::Any
 
 =back
 
-=head1 SEE ALSO
-
-L<Skype::Any::Object>
+=back
 
 =cut

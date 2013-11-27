@@ -24,22 +24,28 @@ __END__
 
 =head1 NAME
 
-Skype::Any::Object::ChatMessage - 
+Skype::Any::Object::ChatMessage - ChatMessage object for Skype::Any
 
 =head1 SYNOPSIS
 
-    use Skype::Any;
+  use Skype::Any;
 
-    my $skype = Skype::Any->new;
-    my $chatmessage = $skype->chatmessage($id);
+  my $skype = Skype::Any->new;
+  my $chatmessage = $skype->chatmessage($id);
 
 =head1 METHODS
 
-=head2 C<user>
+=over 4
 
-=head2 C<chat>
+=item C<< $chatmessage->user() >>
 
-=head2 C<property>
+Get user object who sent a message.
+
+=item C<< $chatmessage->chat() >>
+
+Get chat object from message has been sent.
+
+=item C<< $chatmessage->property($property[, $value]) >>
 
 =over 4
 
@@ -75,8 +81,6 @@ Skype::Any::Object::ChatMessage -
 
 =back
 
-=head1 SEE ALSO
-
-L<Skype::Any::Object>
+=back
 
 =cut

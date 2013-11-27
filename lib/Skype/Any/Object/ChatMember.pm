@@ -23,7 +23,9 @@ Skype::Any::Object::ChatMember - ChatMember object for Skype::Any
 
 =head1 METHODS
 
-=head2 C<property>
+=over 4
+
+=item C<< $chatmember->property($property[, $value]) >>
 
 =over 4
 
@@ -37,8 +39,6 @@ Skype::Any::Object::ChatMember - ChatMember object for Skype::Any
 
 =back
 
-=head1 SEE ALSO
-
-L<Skype::Any::Object>
+=back
 
 =cut

@@ -115,28 +115,26 @@ Skype::Any::API - API interface for Skype::Any
 
 =head1 METHODS
 
-=head2 C<run>
+=over 4
 
-Running an event loop.
-
-=head2 C<is_running>
-
-  $api->is_running;
+=item C<< $api->is_running() >>
 
 Return 1 when Skype is running and 0 otherwise.
 
-=head2 C<send_command>
-
-  $api->send_command($cmd, $expected);
+=item C<< $api->send_command($cmd, $expected) >>
 
 Send Skype API string. This method returns new instance of L<Skype::Any::Commond>. If you want reply command sent:
 
   $api->send_command($cmd)->reply();
 
+=back
+
 =head1 ATTRIBUTES
 
-=head2 C<handler>
+=over 4
 
-Instance of C<Skype::Any::Handler>.
+=item C<< $api->handler >>
+
+=back
 
 =cut

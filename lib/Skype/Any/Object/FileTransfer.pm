@@ -15,14 +15,16 @@ Skype::Any::Object::FileTransfer - FileTransfer object for Skype::Any
 
 =head1 SYNOPSIS
 
-    use Skype::Any;
+  use Skype::Any;
 
-    my $skype = Skype::Any->new;
-    my $filetransfer = $skype->filetransfer($id);
+  my $skype = Skype::Any->new;
+  my $filetransfer = $skype->filetransfer($id);
 
 =head1 METHODS
 
-=head2 C<property>
+=over 4
+
+=item C<< $filetransfer->property($property[, $value]) >>
 
 =over 4
 
@@ -50,8 +52,8 @@ Skype::Any::Object::FileTransfer - FileTransfer object for Skype::Any
 
 =back
 
-=head1 SEE ALSO
+=item C<< $filetransfer->alter($action[, $value]) >>
 
-L<Skype::Any::Object>
+=back
 
 =cut

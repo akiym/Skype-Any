@@ -15,13 +15,9 @@ Skype::Any::Object::Application - Application object for Skype::Any
 
 =head1 SYNOPSIS
 
-    use Skype::Any;
+  use Skype::Any;
 
-    my $skype = Skype::Any->new;
-    my $application = $skype->application($id);
-
-=head1 SEE ALSO
-
-L<Skype::Any::Object>
+  my $skype = Skype::Any->new;
+  my $application = $skype->application($id);
 
 =cut

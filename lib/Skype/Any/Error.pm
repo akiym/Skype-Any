@@ -23,11 +23,11 @@ Skype::Any::Error - Error interface for Skype::Any
 
 =head1 METHODS
 
-=head2 C<as_numeric>
+=head2 C<< $error->as_numeric() >>
 
 Return error code.
 
-=head2 C<as_string>
+=head2 C<< $error->as_string() >>
 
 Return error description.
 

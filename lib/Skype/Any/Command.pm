@@ -66,22 +66,20 @@ Skype::Any::Command - Command interface for Skype::Any
 
 =head1 METHODS
 
-=head2 C<as_string>
+=over 4
 
-  $command->as_string();
+=item C<< $command->reply([$expected]) >>
 
-Return a command as binary string.
+Skype API doesn't guarantee an immediate response. When this method is called, (blocking) wait for a reply.
 
-=head2 C<split_reply>
+  print $skype->api->send_command('SEARCH RECENTCHATS')->reply;
 
-  $command->split_reply($limit);
+=item C<< $command->split_reply([$limit]) >>
 
-Return a list of command which is split. $limit is by default 4. It means that command splits to obj, id, property, value.
+Return a list of commands which is split. $limit is by default 4.
 
-=head1 ATTRIBUTES
+  my ($obj, $id, $property, $value) = $command->split_reply();
 
-=head2 C<reply>
-
-Reply command sent.
+=back
 
 =cut

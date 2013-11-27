@@ -59,13 +59,13 @@ Skype::Any::Handler - Handler interface for Skype::Any
 
 =head1 METHODS
 
-=head2 C<handlers>
+=over 4
 
-  $handler->handlers($name, $property);
+=item C<< $handler->handlers($name, $property) >>
 
-=head2 C<register>
+Get handlers you registered.
 
-  $handler->register($name, sub { ... });
+=item C<< $handler->register($name, sub { ... }) >>
 
 Register _ (default) handler.
 
@@ -77,11 +77,15 @@ Register $name handler and you can register named handler below.
 
 =item Command
 
+Call 'Command' handler when you sent the command.
+
   $handler->register(Command => sub {
       my $command = shift; # Skype::Any::Command
   });
 
 =item Notify
+
+Call 'Notify' handler when you received the notification.
 
   $handler->register(Notify => sub {
       my $notification = shift;
@@ -93,6 +97,8 @@ Register $name handler and you can register named handler below.
 
 =item Reply
 
+Call 'Reply' handler when you sent the command and reply it.
+
   $handler->register(Reply => sub {
       my $reply = shift; # Skype::Any::Command
 
@@ -101,28 +107,26 @@ Register $name handler and you can register named handler below.
 
 =item Error
 
+Call 'Error' handler when you received error notification or reply.
+
   $handler->register(Error => sub {
       my $error = shift; # Skype::Any::Error
   });
 
 =back
 
-=head2 C<call>
+=item C<< $handler->call($name, $property => @args) >>
 
-  $handler->call($name, $property => @args);
+Call specified handler.
 
-=head2 C<clear>
+=item C<< $handler->clear($name[, $property]) >>
 
-  $handler->clear($name);
-  $handler->clear($name, $property);
+Clear specified handler.
 
-Clear $name handler.
+=item C<< $handler->clear_all($name[, $property]) >>
 
-=head2 C<clear_all>
+Clear all of specified handlers.
 
-  $handler->clear_all($name);
-  $handler->clear_all($name, $property);
-
-Clear all of $name handlers.
+=back
 
 =cut

@@ -141,17 +141,63 @@ Skype::Any - Skype API wrapper for Perl
   });
   $skype->run;
 
+=head2 STARTING
+
+=over 4
+
+=item 1. Start Skype
+
+If you can use Skype API, you have to start Skype.
+
+=item 2. Allow API access
+
+When you start the script using Skype::Any, "Skype API Security" dialog will open automatically. Select "Allow this application to use Skype".
+
+=begin html
+
+<div><img src="https://raw.github.com/akiym/Skype-Any/master/img/dialog.png" /></div>
+
+=end html
+
+=item 3. Manage API access
+
+You can set the name of your application.
+
+  my $skype = Skype::Any->new(
+      name => 'MyApp',
+  );
+
+=begin html
+
+<div><img src="https://raw.github.com/akiym/Skype-Any/master/img/myapp-dialog.png" /></div>
+
+=end html
+
+You can manage your application and select allow/disallow API access.
+
+=begin html
+
+<div><img src="https://raw.github.com/akiym/Skype-Any/master/img/manage.png" /></div>
+
+=end html
+
+It described with Mac, but you can do the same with Linux.
+
+=back
+
 =head1 DESCRIPTION
 
 Skype::Any is Skype API wrapper. It was inspired by Skype4Py.
 
+Note that Skype::Any is using Skype Desktop API. However, Skype Desktop API will stop working in December 2013. You can not use lastest version of Skype.
+
 =head1 METHODS
 
-=head2 C<new>
+=over 4
 
-  my $skype = Skype::Any->new();
+=item C<< my $skype = Skype::Any->new() >>
 
-Create new instance of Skype::Any. Notice that necessary Skype client is running.
+Create an instance of Skype::Any.
 
 =over 4
 
@@ -161,19 +207,57 @@ Name of your application. This name will be shown to the user, when your applica
 
 =item protocol => 8 : Num
 
-Protocol number.
+Skype protocol number.
 
 =back
 
-=head2 C<object>
+=item C<< $skype->attach() >>
 
-See below for more infomation.
+Attach to Skype. However, you need not call this method. When you call C<< $skype->run() >>, it will be attach to Skype automatically.
 
-=head2 C<user>
+If you want to manage event loop, you have to call this method. e.g. running with Twiggy:
 
-  $skype->user($id);
+  $skype->attach;
 
-Create new instance of L<Skype::Any::User>.
+  my $twiggy = Twiggy::Server->new(
+      host => $http_host,
+      port => $http_port,
+  );
+  $twiggy->register_service($app);
+
+  $skype->run;
+
+=item C<< $skype->run() >>
+
+Running an event loop. You have to call this method at the end.
+
+=item C<< $skype->message_received(sub { ... }) >>
+
+  $skype->message_received(sub {
+    my ($chatmessage) = @_;
+
+    ...
+  });
+
+Register 'chatmessage' handler for when a chat message is coming.
+
+=item C<< $skype->create_chat_with($username, $message) >>
+
+Send a $message to $username.
+
+Alias for:
+
+  $skype->user($username)->chat->send_message($message);
+
+=back
+
+=head2 OBJECTS
+
+=over 4
+
+=item C<< $skype->user($id) >>
+
+Create new instance of L<Skype::Any::Object::User>.
 
   $skype->user(sub { ... })
 
@@ -197,79 +281,65 @@ this code similar to:
   $skype->object(user => $name => sub {
   });
 
-C<profile>, C<call>, ..., these methods are the same operation.
+C<< $skype->profile >>, C<< $skype->call >>, ..., these methods are the same operation.
 
-=head2 C<profile>
+=item C<< $skype->profile() >>
 
-L<Skype::Any::Profile>
+Note that this method takes no argument. Profile object doesn't have id.
 
-=head2 C<call>
+L<Skype::Any::Object::Profile>
 
-L<Skype::Any::Call>
+=item C<< $skype->call() >>
 
-=head2 C<message>
+L<Skype::Any::Object::Call>
 
-Deprecated. You can use C<Skype::Any::ChatMessage>.
+=item C<< $skype->message() >>
 
-L<Skype::Any::Message>
+Deprecated in Skype protocol 3. Use C<Skype::Any::Object::ChatMessage>.
 
-=head2 C<chat>
+L<Skype::Any::Object::Message>
 
-L<Skype::Any::Chat>
+=item C<< $skype->chat() >>
 
-=head2 C<chatmember>
+L<Skype::Any::Object::Chat>
 
-L<Skype::Any::ChatMember>
+=item C<< $skype->chatmember() >>
 
-=head2 C<chatmessage>
+L<Skype::Any::Object::ChatMember>
 
-L<Skype::Any::ChatMessage>
+=item C<< $skype->chatmessage() >>
 
-=head2 C<voicemail>
+L<Skype::Any::Object::ChatMessage>
 
-L<Skype::Any::VoiceMail>
+=item C<< $skype->voicemail() >>
 
-=head2 C<sms>
+L<Skype::Any::Object::VoiceMail>
 
-L<Skype::Any::SMS>
+=item C<< $skype->sms() >>
 
-=head2 C<application>
+L<Skype::Any::Object::SMS>
 
-L<Skype::Any::Application>
+=item C<< $skype->application() >>
 
-=head2 C<group>
+L<Skype::Any::Object::Application>
 
-L<Skype::Any::Group>
+=item C<< $skype->group() >>
 
-=head2 C<filetransfer>
+L<Skype::Any::Object::Group>
 
-L<Skype::Any::FileTransfer>
+=item C<< $skype->filetransfer() >>
 
-=head2 C<message_received>
+L<Skype::Any::Object::FileTransfer>
 
-  $skype->message_received(sub { my ($msg) = @_; ... });
+=back
 
-Register 'chatmessage' handler for when a chat message is coming.
+=head2 ATTRIBUTES
 
-=head2 C<message_received>
+=over 4
 
-  $skype->create_chat_with($username, $message);
+=item C<< $skype->api >>
 
-Send a $message to $username.
-
-Alias for:
-
-  $skype->user($username)->chat->send_message($message);
-
-=head2 C<run>
-
-Running an event loop.
-
-=head1 ATTRIBUTES
-
-=head2 C<api>
-
-Instance of L<Skype::Any::API>. e.g. send "Happy new year!" to all recent chats.
+Instance of L<Skype::Any::API>. You can call Skype API directly. e.g. send "Happy new year!" to all recent chats.
 
   my $reply = $skype->api->send_command('SEARCH RECENTCHATS')->reply;
   $reply =~ s/^CHATS\s+//;
@@ -278,23 +348,31 @@ Instance of L<Skype::Any::API>. e.g. send "Happy new year!" to all recent chats.
       $chat->send_message('Happy new year!");
   }
 
-=head2 C<handler>
+=item C<< $skype->handler >>
 
 Instance of L<Skype::Any::Handler>. You can also register a handler:
 
   $skype->handler->register($name, sub { ... });
 
+=back
+
+=head1 SUPPORTS
+
+Skype::Any working on Mac and Linux. But it doesn't support Windows. Patches welcome.
+
 =head1 SEE ALSO
 
 L<Public API Reference|https://developer.skype.com/public-api-reference>
 
-=head1 AUTHOR
-
-Takumi Akiyama E<lt>t.akiym at gmail.comE<gt>
-
 =head1 LICENSE
+
+Copyright (C) Takumi Akiyama.
 
 This library is free software; you can redistribute it and/or modify
 it under the same terms as Perl itself.
+
+=head1 AUTHOR
+
+Takumi Akiyama E<lt>t.akiym@gmail.comE<gt>
 
 =cut

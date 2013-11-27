@@ -14,14 +14,16 @@ Skype::Any::Object::Profile - Profile object for Skype::Any
 
 =head1 SYNOPSIS
 
-    use Skype::Any;
+  use Skype::Any;
 
-    my $skype = Skype::Any->new;
-    my $profile = $skype->profile();
+  my $skype = Skype::Any->new;
+  my $profile = $skype->profile();
 
 =head1 METHODS
 
-=head2 C<property>
+=over 4
+
+=item C<< $profile->property($property[, $value]) >>
 
 =over 4
 
@@ -73,8 +75,6 @@ Skype::Any::Object::Profile - Profile object for Skype::Any
 
 =back
 
-=head1 SEE ALSO
-
-L<Skype::Any::Object>
+=back
 
 =cut

@@ -17,14 +17,16 @@ Skype::Any::Object::SMS - SMS object for Skype::Any
 
 =head1 SYNOPSIS
 
-    use Skype::Any;
+  use Skype::Any;
 
-    my $skype = Skype::Any->new;
-    my $sms = $skype->sms($id);
+  my $skype = Skype::Any->new;
+  my $sms = $skype->sms($id);
 
 =head1 METHODS
 
-=head2 C<property>
+=over 4
+
+=item C<< $sms->property($property[, $value]) >>
 
 =over 4
 
@@ -54,8 +56,8 @@ Skype::Any::Object::SMS - SMS object for Skype::Any
 
 =back
 
-=head1 SEE ALSO
+=item C<< $sms->alter($action[, $value]) >>
 
-L<Skype::Any::Object>
+=back
 
 =cut

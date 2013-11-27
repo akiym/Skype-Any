@@ -18,154 +18,204 @@ Skype::Any - Skype API wrapper for Perl
     });
     $skype->run;
 
+## STARTING
+
+1. Start Skype
+
+    If you can use Skype API, you have to start Skype.
+
+2. Allow API access
+
+    When you start the script using Skype::Any, "Skype API Security" dialog will open automatically. Select "Allow this application to use Skype".
+
+    <div><img src="https://raw.github.com/akiym/Skype-Any/master/img/dialog.png" /></div>
+
+3. Manage API access
+
+    You can set the name of your application.
+
+        my $skype = Skype::Any->new(
+            name => 'MyApp',
+        );
+
+    <div><img src="https://raw.github.com/akiym/Skype-Any/master/img/myapp-dialog.png" /></div>
+
+    You can manage your application and select allow/disallow API access.
+
+    <div><img src="https://raw.github.com/akiym/Skype-Any/master/img/manage.png" /></div>
+
+    It described with Mac, but you can do the same with Linux.
+
 # DESCRIPTION
 
 Skype::Any is Skype API wrapper. It was inspired by Skype4Py.
 
+Note that Skype::Any is using Skype Desktop API. However, Skype Desktop API will stop working in December 2013. You can not use lastest version of Skype.
+
 # METHODS
 
-## `new`
+- `my $skype = Skype::Any->new()`
 
-    my $skype = Skype::Any->new();
+    Create an instance of Skype::Any.
 
-Create new instance of Skype::Any. Notice that necessary Skype client is running.
+    - name => 'Skype::Any' : Str
 
-- name => 'Skype::Any' : Str
+        Name of your application. This name will be shown to the user, when your application uses Skype.
 
-    Name of your application. This name will be shown to the user, when your application uses Skype.
+    - protocol => 8 : Num
 
-- protocol => 8 : Num
+        Skype protocol number.
 
-    Protocol number.
+- `$skype->attach()`
 
-## `object`
+    Attach to Skype. However, you need not call this method. When you call `$skype->run()`, it will be attach to Skype automatically.
 
-See below for more infomation.
+    If you want to manage event loop, you have to call this method. e.g. running with Twiggy:
 
-## `user`
+        $skype->attach;
 
-    $skype->user($id);
+        my $twiggy = Twiggy::Server->new(
+            host => $http_host,
+            port => $http_port,
+        );
+        $twiggy->register_service($app);
 
-Create new instance of [Skype::Any::User](http://search.cpan.org/perldoc?Skype::Any::User).
+        $skype->run;
 
-    $skype->user(sub { ... })
+- `$skype->run()`
 
-Register \_ (default) handler.
+    Running an event loop. You have to call this method at the end.
 
-    $skype->user($name => sub { ... }, ...)
+- `$skype->message_received(sub { ... })`
 
-Register $name handler.
+        $skype->message_received(sub {
+          my ($chatmessage) = @_;
 
-    $skype->user($id);
-    $skype->user(sub {
-    });
-    $skype->user($name => sub {
-    });
+          ...
+        });
 
-this code similar to:
+    Register 'chatmessage' handler for when a chat message is coming.
 
-    $skype->object(user => $id);
-    $skype->object(user => sub {
-    });
-    $skype->object(user => $name => sub {
-    });
+- `$skype->create_chat_with($username, $message)`
 
-`profile`, `call`, ..., these methods are the same operation.
+    Send a $message to $username.
 
-## `profile`
+    Alias for:
 
-[Skype::Any::Profile](http://search.cpan.org/perldoc?Skype::Any::Profile)
+        $skype->user($username)->chat->send_message($message);
 
-## `call`
+## OBJECTS
 
-[Skype::Any::Call](http://search.cpan.org/perldoc?Skype::Any::Call)
+- `$skype->user($id)`
 
-## `message`
+    Create new instance of [Skype::Any::Object::User](http://search.cpan.org/perldoc?Skype::Any::Object::User).
 
-Deprecated. You can use `Skype::Any::ChatMessage`.
+        $skype->user(sub { ... })
 
-[Skype::Any::Message](http://search.cpan.org/perldoc?Skype::Any::Message)
+    Register \_ (default) handler.
 
-## `chat`
+        $skype->user($name => sub { ... }, ...)
 
-[Skype::Any::Chat](http://search.cpan.org/perldoc?Skype::Any::Chat)
+    Register $name handler.
 
-## `chatmember`
+        $skype->user($id);
+        $skype->user(sub {
+        });
+        $skype->user($name => sub {
+        });
 
-[Skype::Any::ChatMember](http://search.cpan.org/perldoc?Skype::Any::ChatMember)
+    this code similar to:
 
-## `chatmessage`
+        $skype->object(user => $id);
+        $skype->object(user => sub {
+        });
+        $skype->object(user => $name => sub {
+        });
 
-[Skype::Any::ChatMessage](http://search.cpan.org/perldoc?Skype::Any::ChatMessage)
+    `$skype->profile`, `$skype->call`, ..., these methods are the same operation.
 
-## `voicemail`
+- `$skype->profile()`
 
-[Skype::Any::VoiceMail](http://search.cpan.org/perldoc?Skype::Any::VoiceMail)
+    Note that this method takes no argument. Profile object doesn't have id.
 
-## `sms`
+    [Skype::Any::Object::Profile](http://search.cpan.org/perldoc?Skype::Any::Object::Profile)
 
-[Skype::Any::SMS](http://search.cpan.org/perldoc?Skype::Any::SMS)
+- `$skype->call()`
 
-## `application`
+    [Skype::Any::Object::Call](http://search.cpan.org/perldoc?Skype::Any::Object::Call)
 
-[Skype::Any::Application](http://search.cpan.org/perldoc?Skype::Any::Application)
+- `$skype->message()`
 
-## `group`
+    Deprecated in Skype protocol 3. Use `Skype::Any::Object::ChatMessage`.
 
-[Skype::Any::Group](http://search.cpan.org/perldoc?Skype::Any::Group)
+    [Skype::Any::Object::Message](http://search.cpan.org/perldoc?Skype::Any::Object::Message)
 
-## `filetransfer`
+- `$skype->chat()`
 
-[Skype::Any::FileTransfer](http://search.cpan.org/perldoc?Skype::Any::FileTransfer)
+    [Skype::Any::Object::Chat](http://search.cpan.org/perldoc?Skype::Any::Object::Chat)
 
-## `message_received`
+- `$skype->chatmember()`
 
-    $skype->message_received(sub { my ($msg) = @_; ... });
+    [Skype::Any::Object::ChatMember](http://search.cpan.org/perldoc?Skype::Any::Object::ChatMember)
 
-Register 'chatmessage' handler for when a chat message is coming.
+- `$skype->chatmessage()`
 
-## `message_received`
+    [Skype::Any::Object::ChatMessage](http://search.cpan.org/perldoc?Skype::Any::Object::ChatMessage)
 
-    $skype->create_chat_with($username, $message);
+- `$skype->voicemail()`
 
-Send a $message to $username.
+    [Skype::Any::Object::VoiceMail](http://search.cpan.org/perldoc?Skype::Any::Object::VoiceMail)
 
-Alias for:
+- `$skype->sms()`
 
-    $skype->user($username)->chat->send_message($message);
+    [Skype::Any::Object::SMS](http://search.cpan.org/perldoc?Skype::Any::Object::SMS)
 
-## `run`
+- `$skype->application()`
 
-Running an event loop.
+    [Skype::Any::Object::Application](http://search.cpan.org/perldoc?Skype::Any::Object::Application)
 
-# ATTRIBUTES
+- `$skype->group()`
 
-## `api`
+    [Skype::Any::Object::Group](http://search.cpan.org/perldoc?Skype::Any::Object::Group)
 
-Instance of [Skype::Any::API](http://search.cpan.org/perldoc?Skype::Any::API). e.g. send "Happy new year!" to all recent chats.
+- `$skype->filetransfer()`
 
-    my $reply = $skype->api->send_command('SEARCH RECENTCHATS')->reply;
-    $reply =~ s/^CHATS\s+//;
-    for my $chatname (split /,\s+/ $reply) {
-        my $chat = $skype->chat($chatname);
-        $chat->send_message('Happy new year!");
-    }
+    [Skype::Any::Object::FileTransfer](http://search.cpan.org/perldoc?Skype::Any::Object::FileTransfer)
 
-## `handler`
+## ATTRIBUTES
 
-Instance of [Skype::Any::Handler](http://search.cpan.org/perldoc?Skype::Any::Handler). You can also register a handler:
+- `$skype->api`
 
-    $skype->handler->register($name, sub { ... });
+    Instance of [Skype::Any::API](http://search.cpan.org/perldoc?Skype::Any::API). You can call Skype API directly. e.g. send "Happy new year!" to all recent chats.
+
+        my $reply = $skype->api->send_command('SEARCH RECENTCHATS')->reply;
+        $reply =~ s/^CHATS\s+//;
+        for my $chatname (split /,\s+/ $reply) {
+            my $chat = $skype->chat($chatname);
+            $chat->send_message('Happy new year!");
+        }
+
+- `$skype->handler`
+
+    Instance of [Skype::Any::Handler](http://search.cpan.org/perldoc?Skype::Any::Handler). You can also register a handler:
+
+        $skype->handler->register($name, sub { ... });
+
+# SUPPORTS
+
+Skype::Any working on Mac and Linux. But it doesn't support Windows. Patches welcome.
 
 # SEE ALSO
 
 [Public API Reference](https://developer.skype.com/public-api-reference)
 
-# AUTHOR
-
-Takumi Akiyama <t.akiym at gmail.com>
-
 # LICENSE
+
+Copyright (C) Takumi Akiyama.
 
 This library is free software; you can redistribute it and/or modify
 it under the same terms as Perl itself.
+
+# AUTHOR
+
+Takumi Akiyama <t.akiym@gmail.com>

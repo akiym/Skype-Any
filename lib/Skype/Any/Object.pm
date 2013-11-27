@@ -110,32 +110,36 @@ Skype::Any::Object - General object class for Skype::Any::Object::*
 
 =head1 METHODS
 
-=head2 C<object>
+=over 4
 
-  $object->object($obj, @args);
+=item C<< $object->object($obj, @args) >>
 
 Create new instance of Skype::Any::Object::*.
 
   my $user = $object->object(user => 'echo123');
 
-=head2 C<property>
-
-  $object->property($property);
+=item C<< $object->property($property[, $value]) >>
 
 Get $property.
 
-  $object->property($property, $value);
+  $object->property($obj, $property);
 
 Set $property to $value.
 
+  $object->property($obj, $property, $value);
+
+=item C<< $object->alter($obj, $action[, $value]) >>
+
+=back
+
 =head1 ATTRIBUTES
 
-=head2 C<api>
+=over 4
 
-Instance of L<Skype::Any::API>.
+=item C<< $object->api >>
 
-=head2 C<handler>
+=item C<< $object->handler >>
 
-Instance of L<Skype::Any::Handler>.
+=back
 
 =cut

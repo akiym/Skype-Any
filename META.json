@@ -1,7 +1,7 @@
 {
    "abstract" : "Skype API wrapper for Perl",
    "author" : [
-      "Takumi Akiyama <t.akiym at gmail.com>"
+      "Takumi Akiyama <t.akiym@gmail.com>"
    ],
    "dynamic_config" : 0,
    "generated_by" : "Minilla/v0.9.0, CPAN::Meta::Converter version 2.120921",
@@ -67,8 +67,5 @@
          "web" : "https://github.com/akiym/Skype-Any"
       }
    },
-   "version" : "0.03",
-   "x_contributors" : [
-      "Takumi Akiyama <t.akiym@gmail.com>"
-   ]
+   "version" : "0.03"
 }

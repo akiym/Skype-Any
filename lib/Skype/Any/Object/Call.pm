@@ -17,14 +17,16 @@ Skype::Any::Object::Call - Call object for Skype::Any
 
 =head1 SYNOPSIS
 
-    use Skype::Any;
+  use Skype::Any;
 
-    my $skype = Skype::Any->new;
-    my $call = $skype->call($id);
+  my $skype = Skype::Any->new;
+  my $call = $skype->call($id);
 
 =head1 METHODS
 
-=head2 C<property>
+=over 4
+
+=item C<< $call->property($property[, $value]) >>
 
 =over 4
 
@@ -92,10 +94,8 @@ Skype::Any::Object::Call - Call object for Skype::Any
 
 =back
 
-=head2 C<alter>
+=item C<< $call->alter($action[, $value]) >>
 
-=head1 SEE ALSO
-
-L<Skype::Any::Object>
+=back
 
 =cut

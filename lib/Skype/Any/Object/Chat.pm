@@ -25,20 +25,21 @@ Skype::Any::Object::Chat - Chat object for Skype::Any
 
 =head1 SYNOPSIS
 
-    use Skype::Any;
+  use Skype::Any;
 
-    my $skype = Skype::Any->new;
-    my $chat = $skype->chat($id);
+  my $skype = Skype::Any->new;
+  my $chat = $skype->chat($id);
 
 =head1 METHODS
 
-=head2 C<send_message>
+=over 4
 
-    $chat->send_message($message);
+=item C<< $chat->send_message($message) >>
+
 
 Send a message to chat, return instance of Skype::Any::Object::ChatMessage.
 
-=head2 C<property>
+=item C<< $chat->property($property[, $value]) >>
 
 =over 4
 
@@ -96,8 +97,8 @@ Send a message to chat, return instance of Skype::Any::Object::ChatMessage.
 
 =back
 
-=head1 SEE ALSO
+=item C<< $chat->alter($action[, $value]) >>
 
-L<Skype::Any::Object>
+=back
 
 =cut
