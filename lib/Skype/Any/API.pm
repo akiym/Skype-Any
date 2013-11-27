@@ -47,6 +47,7 @@ sub send_command {
     my $command = Skype::Any::Command->new($cmd);
     if (my $reply = $self->send(Encode::encode_utf8($command->with_id))) {
         $reply = Encode::decode_utf8($reply);
+        $reply =~ s/^#(\d+-\d+)\s+//;
         $command->{cv}->send($reply);
         $self->_reply_received($reply);
     } else {
