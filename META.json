@@ -50,6 +50,8 @@
       "runtime" : {
          "requires" : {
             "AnyEvent" : "0",
+            "Cocoa::EventLoop" : "0",
+            "Cocoa::Skype" : "0",
             "Module::Runtime" : "0",
             "parent" : "0",
             "perl" : "5.008001"
@@ -67,5 +69,5 @@
          "web" : "https://github.com/akiym/Skype-Any"
       }
    },
-   "version" : "0.03"
+   "version" : "0.04"
 }
