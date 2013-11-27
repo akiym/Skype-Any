@@ -1,3 +1,5 @@
+requires 'AnyEvent';
+requires 'Module::Runtime';
 requires 'parent';
 requires 'perl', '5.008001';
 

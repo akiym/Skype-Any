@@ -3,13 +3,10 @@ use strict;
 use warnings;
 use parent qw/Skype::Any::Object/;
 
-sub property { shift->_property('CHAT', @_) }
-sub alter    { shift->_alter('CHAT', @_) }
+sub property { shift->SUPER::property('CHAT', @_) }
+sub alter    { shift->SUPER::alter('CHAT', @_) }
 
-for my $property (qw/bookmarked/) {
-    no strict 'refs';
-    *{$property} = sub { $_[0]->_boolean($property) };
-}
+__PACKAGE__->_mk_bool_property(qw/bookmarked/);
 
 sub send_message {
     my ($self, $message) = @_;

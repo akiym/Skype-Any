@@ -3,12 +3,9 @@ use strict;
 use warnings;
 use parent qw/Skype::Any::Object/;
 
-sub property { shift->_property('CHATMEMBER', @_) }
+sub property { shift->SUPER::property('CHATMEMBER', @_) }
 
-for my $property (qw/is_active/) {
-    no strict 'refs';
-    *{$property} = sub { $_[0]->_boolean($property) };
-}
+__PACKAGE__->_mk_bool_property(qw/is_active/);
 
 1;
 __END__

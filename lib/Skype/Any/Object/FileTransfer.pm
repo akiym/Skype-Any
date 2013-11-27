@@ -3,8 +3,8 @@ use strict;
 use warnings;
 use parent qw/Skype::Any::Object/;
 
-sub property { shift->_property('FILETRANSFER', @_) }
-sub alter    { shift->_alter('FILETRANSFER', @_) }
+sub property { shift->SUPER::property('FILETRANSFER', @_) }
+sub alter    { shift->SUPER::alter('FILETRANSFER', @_) }
 
 1;
 __END__

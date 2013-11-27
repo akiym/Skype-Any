@@ -3,8 +3,8 @@ use strict;
 use warnings;
 use parent qw/Skype::Any::Object/;
 
-sub property { shift->_property('VOICEMAIL', @_) }
-sub alter    { shift->_alter('VOICEMAIL', @_) }
+sub property { shift->SUPER::property('VOICEMAIL', @_) }
+sub alter    { shift->SUPER::alter('VOICEMAIL', @_) }
 
 1;
 __END__

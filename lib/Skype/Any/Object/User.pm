@@ -3,13 +3,10 @@ use strict;
 use warnings;
 use parent qw/Skype::Any::Object/;
 
-sub property { shift->_property('USER', @_) }
-sub alter    { shift->_alter('USER', @_) }
+sub property { shift->SUPER::property('USER', @_) }
+sub alter    { shift->SUPER::alter('USER', @_) }
 
-for my $property (qw/hascallequipment is_video_capable is_voicemail_capable isauthorized isblocked can_leave_vm is_cf_active/) {
-    no strict 'refs';
-    *{$property} = sub { $_[0]->_boolean($property) };
-}
+__PACKAGE__->_mk_bool_property(qw/hascallequipment is_video_capable is_voicemail_capable isauthorized isblocked can_leave_vm is_cf_active/);
 
 sub create_chat {
     my $self = shift;

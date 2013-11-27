@@ -2,52 +2,89 @@ package Skype::Any;
 use strict;
 use warnings;
 use 5.008001;
-use Skype::Any::Handler;
-use Skype::Any::Util qw/load_class/;
 
 our $VERSION = '0.03';
 
+use Module::Runtime qw/use_module/;
+
+our %OBJECT = (
+    USER         => 'User',
+    CALL         => 'Call',
+    MESSAGE      => 'Message',
+    CHAT         => 'Chat',
+    CHATMEMBER   => 'ChatMember',
+    CHATMESSAGE  => 'ChatMessage',
+    VOICEMAIL    => 'VoiceMail',
+    SMS          => 'SMS',
+    APPLICATION  => 'Application',
+    GROUP        => 'Group',
+    FILETRANSFER => 'FileTransfer',
+);
+
 sub new {
-    my $class = shift;
-    my %args = @_ == 1 ? %{$_[0]} : @_;
-
-    my $self = bless {
-        name => 'Skype::Any',
+    my ($class, %args) = @_;
+    return bless {
+        name      => __PACKAGE__,
+        protocol  => 8,
+        api_class => "Skype::Any::API::$^O",
         %args,
-        handler => Skype::Any::Handler->new(),
     }, $class;
-
-    my $klass = load_class($^O, 'Skype::Any::API');
-    my $api = $klass->new($self, name => $self->{name});
-    $api->attach;
-    $self->{api} = $api;
-
-    return $self;
 }
 
-sub api     { $_[0]->{api} }
-sub handler { $_[0]->{handler} }
+sub api {
+    my $self = shift;
+    unless (defined $self->{api}) {
+        my $api = use_module($self->{api_class})->new(skype => $self);
+        $self->{api} = $api;
+    }
+    return $self->{api};
+}
 
-sub run { $_[0]->api->run }
+sub handler {
+    my $self = shift;
+    unless (defined $self->{handler}) {
+        require Skype::Any::Handler;
+        $self->{handler} = Skype::Any::Handler->new();
+    }
+    return $self->{handler};
+}
 
-sub _object {
-    my ($self, $object, @args) = @_;
-    if (@args < 2) {
-        if (ref $args[0] eq 'CODE') {
-            $self->handler->register(uc $object, $args[0]);
-        } else {
-            my $class = load_class($object, 'Skype::Any::Object');
-            return $class->new($self, (defined $args[0] ? {id => $args[0]} : +{}));
-        }
-    } else {
-        $self->handler->register(uc $object, {@args});
+sub attach { $_[0]->api->attach }
+sub run    { $_[0]->api->run }
+
+sub object {
+    my ($self, $object, $args) = @_;
+    $object = uc $object;
+    if (exists $OBJECT{$object}) {
+        return $self->_create_object($OBJECT{$object}, $args);
     }
 }
 
-sub object {
-    my ($self, $obj, @args) = @_;
-    $obj = lc $obj;
-    return $self->$obj(@args);
+sub _object {
+    my ($self, $object, @args) = @_;
+    if (@args <= 1) {
+        if (ref $args[0] eq 'CODE') {
+            # Register default (_) handler
+            $self->_register_handler($object, $args[0]);
+        } else {
+            $self->_create_object($object, $args[0]);
+        }
+    } else {
+        $self->_register_handler($object, {@args});
+    }
+}
+
+sub _register_handler {
+    my ($self, $object, $args) = @_;
+    $self->handler->register(uc $object, $args);
+}
+
+sub _create_object {
+    my ($self, $object, $args) = @_;
+    return use_module("Skype::Any::Object::$object")->new(
+        skype => $self,
+        (defined $args ? (id => $args) : ()),
+    );
 }
 
 sub user         { shift->_object('User', @_) }
@@ -71,7 +108,9 @@ sub message_received {
             $code->($chatmessage);
         }
     };
-    $self->chatmessage(status => $wrapped_code);
+    $self->handler->register(CHATMESSAGE => {
+        STATUS => $wrapped_code,
+    });
 }
 
 sub create_chat_with {

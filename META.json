@@ -49,6 +49,8 @@
       },
       "runtime" : {
          "requires" : {
+            "AnyEvent" : "0",
+            "Module::Runtime" : "0",
             "parent" : "0",
             "perl" : "5.008001"
          }

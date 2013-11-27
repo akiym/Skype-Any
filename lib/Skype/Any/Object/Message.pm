@@ -3,7 +3,7 @@ use strict;
 use warnings;
 use parent qw/Skype::Any::Object/;
 
-sub property { shift->_property('MESSAGE', @_) }
+sub property { shift->SUPER::property('MESSAGE', @_) }
 
 1;
 __END__

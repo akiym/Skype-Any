@@ -3,13 +3,10 @@ use strict;
 use warnings;
 use parent qw/Skype::Any::Object/;
 
-sub property { shift->_property('SMS', @_) }
-sub alter    { shift->_alter('SMS', @_) }
+sub property { shift->SUPER::property('SMS', @_) }
+sub alter    { shift->SUPER::alter('SMS', @_) }
 
-for my $property (qw/is_failed_unseen/) {
-    no strict 'refs';
-    *{$property} = sub { $_[0]->_boolean($property) };
-}
+__PACKAGE__->_mk_bool_property(qw/is_failed_unseen/);
 
 1;
 __END__

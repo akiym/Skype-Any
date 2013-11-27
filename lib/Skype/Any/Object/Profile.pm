@@ -3,18 +3,7 @@ use strict;
 use warnings;
 use parent qw/Skype::Any::Object/;
 
-sub property {
-    my ($self, $property, $value) = @_;
-    $property = uc $property;
-    my $cmd = sprintf 'PROFILE %s', $property;
-    if (!defined $value) {
-        my $command = $self->api->send_command(sprintf('GET %s', $cmd), $cmd);
-        my @reply = $command->split_reply(3);
-        return $reply[2];
-    } else {
-        $self->api->send_command(sprintf('SET %s %s', $cmd, $value), $cmd);
-    }
-}
+sub property { shift->SUPER::property('PROFILE', @_) }
 
 1;
 __END__

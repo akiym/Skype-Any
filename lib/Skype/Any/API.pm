@@ -6,20 +6,26 @@ use Encode ();
 use Skype::Any::Command;
 use Skype::Any::Error;
 
+our @OBJECT = qw/USER CALL MESSAGE CHAT CHATMEMBER CHATMESSAGE VOICEMAIL SMS APPLICATION GROUP FILETRANSFER/;
+
 sub new {
-    my ($class, $c, %args) = @_;
+    my ($class, %args) = @_;
 
     my $self = bless {
         %args,
-        c => $c,
         commands => {},
     }, $class;
 
-    $self->handler->register(Notify => sub {
+    $self->handler->register(Notification => sub {
         my $notification = shift;
-        my ($obj, $id, $property, $value) = split /\s+/, $notification, 4;
-        if (grep { $_ eq $obj } qw/USER CALL MESSAGE CHAT CHATMEMBER CHATMESSAGE VOICEMAIL SMS APPLICATION GROUP FILETRANSFER/) {
-            my $object = $self->{c}->object($obj => $id);
+        my ($obj, $params) = split /\s+/, $notification, 2;
+        if ($obj eq 'ERROR') {
+            my ($code, $description) = split /\s+/, $params, 2;
+            my $error = Skype::Any::Error->new($code, $description);
+            $self->handler->call('Error', _ => $error);
+        } elsif (grep { $obj eq $_ } @OBJECT) {
+            my ($id, $property, $value) = split /\s+/, $params, 3;
+            my $object = $self->{skype}->object($obj => $id);
             $self->handler->call($obj, _ => $object, $value);
             $self->handler->call($obj, $property => $object, $value);
         }
@@ -28,57 +34,42 @@ sub new {
     return $self;
 }
 
-sub handler { $_[0]->{c}->handler }
+sub handler { $_[0]->{skype}->handler }
 
 sub run;
 sub attach;
 sub is_running;
 sub send;
-sub sleep;
 
 sub send_command {
-    my ($self, $cmd, $expected) = @_;
-    $expected = '' unless defined $expected;
+    my ($self, $cmd) = @_;
 
     my $command = Skype::Any::Command->new($cmd);
-    $self->_push_command($command);
-    my $reply = $self->send($command->as_string);
-    if ($reply) {
-        if ($reply =~ /^#\Q$command->{id}\E/) {
-            $self->_notify_handler()->($reply);
-        }
+    if (my $reply = $self->send(Encode::encode_utf8($command->with_id))) {
+        $reply = Encode::decode_utf8($reply);
+        $command->{cv}->send($reply);
+        $self->_reply_received($reply);
     } else {
-        while (!$command->{reply}) {
-            $self->sleep;
-        }
+        $self->_push_command($command);
     }
+
     $self->handler->call('Command', _ => $command);
 
-    my ($a, $b) = $command->split_reply(2);
-    if ($a eq 'ERROR') {
-        my ($code, $description) = split /\s+/, $b, 2;
-        my $error = Skype::Any::Error->new($code, $description);
-        $self->handler->call('Error', _ => $error);
-        Carp::croak("Caught error: $error");
-    }
-    unless ($command->{reply} =~ /^\Q$expected\E/) {
-        Carp::croak("Unexpected reply from Skype, got [$command->{reply}], expected [$expected (...)]");
-    }
     return $command;
 }
 
 sub _push_command {
     my ($self, $command) = @_;
-    if ($command->{id} < 0) {
-        my $id = 0;
-        while (exists $self->{commands}{$id}) {
+    my $id = $command->{id};
+    if ($id < 1) {
+        while (exists $self->{commands}{"$id-$$"}) {
             $id++;
         }
         $command->{id} = $id;
-    } elsif (exists $self->{commands}{$command->{id}}) {
+    } elsif (exists $self->{commands}{"$id-$$"}) {
         Carp::croak('Command id conflict');
     }
-    $self->{commands}{$command->{id}} = $command;
+    $self->{commands}{"$id-$$"} = $command;
 }
 
 sub _pop_command {
@@ -86,24 +77,33 @@ sub _pop_command {
     return delete $self->{commands}{$id};
 }
 
-sub _notify_handler {
+sub _notification_handler {
     my $self = shift;
     return sub {
         my ($notification) = @_;
-        if ($notification =~ s/^#//) {
-            my ($id, $reply) = split /\s+/, $notification, 2;
-            my $command = $self->_pop_command($id);
-            if ($command) {
-                $reply = Encode::decode_utf8($reply);
-                $command->{reply} = $reply;
-                $self->handler->call('Reply', _ => $command);
-            } else {
-                $self->handler->call('Notify', _ => $reply);
+        $notification = Encode::decode_utf8($notification);
+
+        $self->handler->call('Receive', _ => $notification);
+
+        if ($notification =~ s/^#(\d+-\d+)\s+//) {
+            if (my $command = $self->_pop_command($1)) {
+                $command->{cv}->send($notification);
+                $self->_reply_received($notification);
             }
         } else {
-            $self->handler->call('Notify', _ => $notification);
+            $self->_notification_received($notification);
         }
     };
+}
+
+sub _reply_received {
+    my ($self, $reply) = @_;
+    $self->handler->call('Reply', _ => $reply);
+}
+
+sub _notification_received {
+    my ($self, $notification) = @_;
+    $self->handler->call('Notification', _ => $notification);
 }
 
 1;

@@ -7,32 +7,36 @@ use AnyEvent::DBus;
 use Net::DBus::Skype::API;
 
 sub new {
-    my ($class, $c, %args) = @_;
+    my $class = shift;
+    my $self = $class->SUPER::new(@_);
 
-    my $self = $class->SUPER::new($c, %args);
-    my $protocol = $args{protocol} || 8;
     my $client = Net::DBus::Skype::API->new(
-        name     => $args{name},
-        protocol => $protocol,
-        notify   => $self->_notify_handler(),
+        name     => $self->{skype}->{name},
+        protocol => $self->{skype}->{protocol},
+        notify   => $self->_notification_handler(),
     );
     $self->{client} = $client;
+
+    $self->attach;
 
     return $self;
 }
 
-sub run        { AE::cv()->recv }
-sub is_running { $_[0]->{client}->is_running }
-sub attach     { $_[0]->{client}->attach }
-sub send       { shift->{client}->send_command(@_) }
+sub run { AE::cv()->recv }
 
-sub sleep {
-    my $cv = AE::cv();
-    my $t; $t = AE::timer 0, 0.01, sub {
-        undef $t;
-        $cv->send;
-    };
-    $cv->recv;
+sub attach {
+    my $self = shift;
+    if (!$self->{connected}) {
+        $self->{client}->attach;
+        $self->{connected} = 1;
+
+        return 1;
+    } else {
+        return 0;
+    }
 }
+
+sub is_running { $_[0]->{client}->is_running }
+sub send       { shift->{client}->send_command(@_) }
 
 1;

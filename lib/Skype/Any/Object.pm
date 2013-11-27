@@ -3,46 +3,87 @@ use strict;
 use warnings;
 
 sub new {
-    my ($class, $c, $args) = @_;
-    return bless {
-        c => $c,
-        %$args,
-    }, $class;
+    my ($class, %args) = @_;
+    return bless \%args, $class;
 }
 
-sub api     { $_[0]->{c}->api }
-sub handler { $_[0]->{c}->handler }
+sub api     { $_[0]->{skype}->api }
+sub handler { $_[0]->{skype}->handler }
 
-sub object { shift->{c}->object(@_) }
+sub object {
+    my $self = shift;
+    $self->{skype}->object(@_);
+}
 
-sub property;
-sub alter;
-
-sub _property {
-    my ($self, $name, $property, $value) = @_;
+sub property {
+    my ($self, $obj, $property, $value) = @_;
     $property = uc $property;
-    my $cmd = sprintf '%s %s %s', $name, $self->{id}, $property;
-    if (!defined $value) {
-        my $command = $self->api->send_command(sprintf('GET %s', $cmd), $cmd);
-        my @reply = $command->split_reply;
-        return $reply[3];
+    if (defined $value) {
+        return $self->_set_property($obj, $property, $value);
     } else {
-        $self->api->send_command(sprintf('SET %s %s', $cmd, $value), $cmd);
+        return $self->_get_property($obj, $property);
     }
 }
 
-sub _alter {
-    my ($self, $name, $alter, $args) = @_;
-    my $cmd = sprintf 'ALTER %s %s %s', $name, $self->{id}, $alter;
-    if (defined $args) {
-        $cmd = sprintf '%s %s', $cmd, $args;
-    }
-    $self->api->send_command($cmd);
+sub _get_property {
+    my ($self, $obj, $property) = @_;
+
+    my $id = $self->{id};
+    my $cmd = do {
+        if ($id) {
+            sprintf 'GET %s %s %s', $obj, $id, $property;
+        } else {
+            sprintf 'GET %s %s', $obj, $property;
+        }
+    };
+    my $command = $self->api->send_command($cmd);
+    my @reply = $command->split_reply($id ? 4 : 3);
+    return $reply[$id ? 3 : 2];
 }
 
-sub _boolean {
-    my ($self, $property) = @_;
-    return $self->property($property) eq 'TRUE';
+sub _set_property {
+    my ($self, $obj, $property, $value) = @_;
+
+    my $id = $self->{id};
+    my $cmd = do {
+        if ($id) {
+            sprintf 'SET %s %s %s %s', $obj, $id, $property, $value;
+        } else {
+            sprintf 'SET %s %s %s', $obj, $property, $value;
+        }
+    };
+    my $command = $self->api->send_command($cmd);
+    my @reply = $command->split_reply($id ? 4 : 3);
+    return $reply[$id ? 3 : 2];
+}
+
+sub alter {
+    my ($self, $obj, $action, $value) = @_;
+    $action = uc $action;
+
+    my $id = $self->{id};
+    my $cmd = "ALTER $obj $id $action";
+    my $command;
+    if (defined $value) {
+        $command = $self->api->send_command("$cmd $value");
+    } else {
+        $command = $self->api->send_command($cmd);
+    }
+
+    return $command->reply;
+}
+
+sub _mk_bool_property {
+    my ($class, @property) = @_;
+    {
+        no strict 'refs';
+        for my $property (@property) {
+            *{$property} = sub {
+                my $self = shift;
+                return $self->property($property) eq 'TRUE';
+            };
+        }
+    }
 }
 
 sub AUTOLOAD {
@@ -52,7 +93,7 @@ sub AUTOLOAD {
         no strict 'refs';
         *{$property} = sub {
             my $self = shift;
-            $self->property($property, @_);
+            return $self->property($property, @_);
         };
     }
     goto &$property;

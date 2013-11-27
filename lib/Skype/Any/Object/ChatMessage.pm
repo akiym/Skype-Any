@@ -3,12 +3,9 @@ use strict;
 use warnings;
 use parent qw/Skype::Any::Object/;
 
-sub property { shift->_property('CHATMESSAGE', @_) }
+sub property { shift->SUPER::property('CHATMESSAGE', @_) }
 
-for my $property (qw/is_editable/) {
-    no strict 'refs';
-    *{$property} = sub { $_[0]->_boolean($property) };
-}
+__PACKAGE__->_mk_bool_property(qw/is_editable/);
 
 sub user {
     my $self = shift;

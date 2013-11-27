@@ -3,8 +3,8 @@ use strict;
 use warnings;
 use parent qw/Skype::Any::Object/;
 
-sub property { shift->_property('APPLICATION', @_) }
-sub alter    { shift->_alter('APPLICATION', @_) }
+sub property { shift->SUPER::property('APPLICATION', @_) }
+sub alter    { shift->SUPER::alter('APPLICATION', @_) }
 
 1;
 __END__
