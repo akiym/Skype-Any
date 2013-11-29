@@ -4,7 +4,7 @@
       "Takumi Akiyama <t.akiym@gmail.com>"
    ],
    "dynamic_config" : 0,
-   "generated_by" : "Minilla/v0.9.0, CPAN::Meta::Converter version 2.120921",
+   "generated_by" : "Minilla/v0.11.0, CPAN::Meta::Converter version 2.120921",
    "license" : [
       "perl_5"
    ],
@@ -50,8 +50,6 @@
       "runtime" : {
          "requires" : {
             "AnyEvent" : "0",
-            "Cocoa::EventLoop" : "0",
-            "Cocoa::Skype" : "0",
             "Module::Runtime" : "0",
             "parent" : "0",
             "perl" : "5.008001"
@@ -65,7 +63,8 @@
       },
       "homepage" : "https://github.com/akiym/Skype-Any",
       "repository" : {
-         "url" : "https://github.com/akiym/Skype-Any.git",
+         "type" : "git",
+         "url" : "git://github.com/akiym/Skype-Any.git",
          "web" : "https://github.com/akiym/Skype-Any"
       }
    },
