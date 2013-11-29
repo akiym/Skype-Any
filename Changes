@@ -2,6 +2,10 @@ Revision history for Perl extension Skype::Any
 
 {{$NEXT}}
 
+0.05 2013-11-29T22:31:58Z
+
+    - fix dependency module
+
 0.04 2013-11-27T12:01:59Z
 
     - fix dependency module
