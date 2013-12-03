@@ -4,7 +4,7 @@
       "Takumi Akiyama <t.akiym@gmail.com>"
    ],
    "dynamic_config" : 0,
-   "generated_by" : "Minilla/v0.11.0, CPAN::Meta::Converter version 2.120921",
+   "generated_by" : "Minilla/v0.11.0, CPAN::Meta::Converter version 2.132830",
    "license" : [
       "perl_5"
    ],
@@ -22,7 +22,8 @@
          "eg",
          "examples",
          "author",
-         "builder"
+         "builder",
+         "img"
       ]
    },
    "prereqs" : {
@@ -68,5 +69,5 @@
          "web" : "https://github.com/akiym/Skype-Any"
       }
    },
-   "version" : "0.05"
+   "version" : "0.06"
 }

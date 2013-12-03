@@ -108,7 +108,7 @@ Note that Skype::Any is using Skype Desktop API. However, Skype Desktop API will
 
 - `$skype->user($id)`
 
-    Create new instance of [Skype::Any::Object::User](http://search.cpan.org/perldoc?Skype::Any::Object::User).
+    Create new instance of [Skype::Any::Object::User](https://metacpan.org/pod/Skype::Any::Object::User).
 
         $skype->user(sub { ... })
 
@@ -138,55 +138,55 @@ Note that Skype::Any is using Skype Desktop API. However, Skype Desktop API will
 
     Note that this method takes no argument. Profile object doesn't have id.
 
-    [Skype::Any::Object::Profile](http://search.cpan.org/perldoc?Skype::Any::Object::Profile)
+    [Skype::Any::Object::Profile](https://metacpan.org/pod/Skype::Any::Object::Profile)
 
 - `$skype->call()`
 
-    [Skype::Any::Object::Call](http://search.cpan.org/perldoc?Skype::Any::Object::Call)
+    [Skype::Any::Object::Call](https://metacpan.org/pod/Skype::Any::Object::Call)
 
 - `$skype->message()`
 
     Deprecated in Skype protocol 3. Use `Skype::Any::Object::ChatMessage`.
 
-    [Skype::Any::Object::Message](http://search.cpan.org/perldoc?Skype::Any::Object::Message)
+    [Skype::Any::Object::Message](https://metacpan.org/pod/Skype::Any::Object::Message)
 
 - `$skype->chat()`
 
-    [Skype::Any::Object::Chat](http://search.cpan.org/perldoc?Skype::Any::Object::Chat)
+    [Skype::Any::Object::Chat](https://metacpan.org/pod/Skype::Any::Object::Chat)
 
 - `$skype->chatmember()`
 
-    [Skype::Any::Object::ChatMember](http://search.cpan.org/perldoc?Skype::Any::Object::ChatMember)
+    [Skype::Any::Object::ChatMember](https://metacpan.org/pod/Skype::Any::Object::ChatMember)
 
 - `$skype->chatmessage()`
 
-    [Skype::Any::Object::ChatMessage](http://search.cpan.org/perldoc?Skype::Any::Object::ChatMessage)
+    [Skype::Any::Object::ChatMessage](https://metacpan.org/pod/Skype::Any::Object::ChatMessage)
 
 - `$skype->voicemail()`
 
-    [Skype::Any::Object::VoiceMail](http://search.cpan.org/perldoc?Skype::Any::Object::VoiceMail)
+    [Skype::Any::Object::VoiceMail](https://metacpan.org/pod/Skype::Any::Object::VoiceMail)
 
 - `$skype->sms()`
 
-    [Skype::Any::Object::SMS](http://search.cpan.org/perldoc?Skype::Any::Object::SMS)
+    [Skype::Any::Object::SMS](https://metacpan.org/pod/Skype::Any::Object::SMS)
 
 - `$skype->application()`
 
-    [Skype::Any::Object::Application](http://search.cpan.org/perldoc?Skype::Any::Object::Application)
+    [Skype::Any::Object::Application](https://metacpan.org/pod/Skype::Any::Object::Application)
 
 - `$skype->group()`
 
-    [Skype::Any::Object::Group](http://search.cpan.org/perldoc?Skype::Any::Object::Group)
+    [Skype::Any::Object::Group](https://metacpan.org/pod/Skype::Any::Object::Group)
 
 - `$skype->filetransfer()`
 
-    [Skype::Any::Object::FileTransfer](http://search.cpan.org/perldoc?Skype::Any::Object::FileTransfer)
+    [Skype::Any::Object::FileTransfer](https://metacpan.org/pod/Skype::Any::Object::FileTransfer)
 
 ## ATTRIBUTES
 
 - `$skype->api`
 
-    Instance of [Skype::Any::API](http://search.cpan.org/perldoc?Skype::Any::API). You can call Skype API directly. e.g. send "Happy new year!" to all recent chats.
+    Instance of [Skype::Any::API](https://metacpan.org/pod/Skype::Any::API). You can call Skype API directly. e.g. send "Happy new year!" to all recent chats.
 
         my $reply = $skype->api->send_command('SEARCH RECENTCHATS')->reply;
         $reply =~ s/^CHATS\s+//;
@@ -197,7 +197,7 @@ Note that Skype::Any is using Skype Desktop API. However, Skype Desktop API will
 
 - `$skype->handler`
 
-    Instance of [Skype::Any::Handler](http://search.cpan.org/perldoc?Skype::Any::Handler). You can also register a handler:
+    Instance of [Skype::Any::Handler](https://metacpan.org/pod/Skype::Any::Handler). You can also register a handler:
 
         $skype->handler->register($name, sub { ... });
 
